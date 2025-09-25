@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tribe Shop | Blue Aesthetic</title>
+  <style>
+    /* RESET & BASE */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif;}
+    body { background:#e7f0ff; color:#1e293b; min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; }
+    a { text-decoration:none; color:inherit; cursor:pointer; }
+
+    /* HEADER */
+    header {
+      background:#a5b8ff; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;
+      border-bottom:2px solid #7b91f4; position:sticky; top:0; z-index:999;
+      box-shadow:0 2px 5px rgba(123,145,244,0.3);
+    }
+    header .logo { font-family:'Great Vibes', cursive; font-size:2.2rem; color:#2c3aab; letter-spacing:1.5px; user-select:none; text-shadow:0 0 4px #405de6cc;}
+    nav a { margin-left:25px; font-weight:600; font-size:1rem; color:#364fc7; transition:color 0.3s ease;}
+    nav a:hover { color:#2c3aab;}
+
+    /* MAIN SECTIONS */
+    main { flex-grow:1; padding:30px 25px; max-width:1100px; margin:0 auto; width:100%; }
+    section { display:none; }
+    section.active { display:block; }
+
+    /* HERO (HOME) */
+    #home .hero {
+      background:linear-gradient(135deg,#d0e1ff 0%,#a5b8ff 100%);
+      border-radius:20px; padding:60px 30px; text-align:center;
+      box-shadow:0 10px 30px rgba(123,145,244,0.3); user-select:none;
+    }
+    #home .hero h1 { font-family:'Great Vibes', cursive; font-size:3.5rem; color:#2c3aab; margin-bottom:20px; text-shadow:0 0 6px #405de6cc;}
+    #home .hero p { font-size:1.3rem; color:#405de6cc; margin-bottom:30px; letter-spacing:0.1em;}
+    #home .btn { background:#2c3aab; color:white; padding:15px 40px; font-size:1.2rem; font-weight:700; border:none; border-radius:40px; cursor:pointer; box-shadow:0 6px 15px rgba(44,58,171,0.8); transition:background 0.3s ease, transform 0.2s ease; user-select:none;}
+    #home .btn:hover { background:#405de6; transform:scale(1.05); }
+
+    /* SHOP FILTERS */
+    .filters { margin-bottom:20px; display:flex; gap:15px; flex-wrap:wrap; justify-content:flex-start; align-items:center;}
+    .filters input, .filters select {
+      padding:10px 14px; border-radius:10px; border:2px solid #7b91f4;
+      font-size:1rem; font-weight:600; color:#364fc7; background:#e0e8ff; cursor:pointer; transition:border-color 0.3s ease;
+    }
+    .filters input:hover, .filters select:hover, .filters input:focus, .filters select:focus { border-color:#405de6; outline:none; }
+
+    /* PRODUCT GRID */
+    .products { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:25px;}
+    .product { background:#e0e8ff; border-radius:25px; padding:15px; box-shadow:0 6px 20px rgba(44,58,171,0.2); display:flex; flex-direction:column; align-items:center; transition:transform 0.3s ease; user-select:none;}
+    .product:hover { transform:translateY(-8px); box-shadow:0 12px 30px rgba(44,58,171,0.35);}
+    .product img { width:100%; height:270px; object-fit:cover; border-radius:20px; margin-bottom:15px; box-shadow:0 5px 15px rgba(44,58,171,0.3); pointer-events:none; user-select:none; transition:transform 0.3s ease;}
+    .product:hover img { transform:scale(1.05); }
+    .product h3 { font-size:1.2rem; font-weight:700; color:#364fc7; margin-bottom:10px; text-align:center;}
+    .product p { font-size:1rem; font-weight:600; margin-bottom:15px; color:#405de6;}
+    .product button { background:#2c3aab; border:none; color:white; font-weight:700; font-size:1rem; padding:10px 25px; border-radius:40px; cursor:pointer; box-shadow:0 6px 15px rgba(44,58,171,0.8); transition:background 0.3s ease, transform 0.2s ease; user-select:none;}
+    .product button:hover { background:#405de6; transform:scale(1.1); }
+
+    /* CART SIDEBAR */
+    #cartSidebar {
+      position:fixed; top:0; right:-100%; width:320px; height:100%; background:#e0e8ff; box-shadow:-4px 0 20px rgba(44,58,171,0.3); transition:right 0.4s ease; z-index:1000; display:flex; flex-direction:column; padding:25px; overflow-y:auto;
+    }
+    #cartSidebar.open { right:0; }
+    #cartSidebar h2 { color:#364fc7; font-weight:700; font-size:1.8rem; margin-bottom:15px; text-align:center;}
+    #cartSidebar #cartItems p { display:flex; justify-content:space-between; margin-bottom:10px; font-weight:600; color:#364fc7;}
+    #cartSidebar #cartItems p button { background:transparent; border:none; color:#405de6; font-weight:700; font-size:1.2rem; cursor:pointer;}
+    #cartSidebar #cartItems p button:hover { color:#2c3aab;}
+    #cartSidebar #checkoutBtn { margin-top:auto; background:#2c3aab; color:white; font-weight:700; font-size:1.2rem; padding:15px 20px; border:none; border-radius:50px; cursor:pointer; box-shadow:0 10px 30px rgba(44,58,171,0.8); transition:background 0.3s ease, transform 0.2s ease;}
+    #cartSidebar #checkoutBtn:hover { background:#405de6; transform:scale(1.05); }
+    #cartSidebar #bill { margin-top:15px; font-weight:700; font-size:1.3rem; color:#2c3aab; text-align:center;}
+
+    /* PROFILE & CONTACT remain same as before (unchanged) */
+
+    /* Responsive */
+    @media(max-width:720px){ nav a{margin-left:15px;font-size:0.9rem;} .product img{height:200px;} #home .hero h1{font-size:2.8rem;} #home .hero p{font-size:1.1rem;} .filters{flex-direction:column;align-items:flex-start;} #cartSidebar{width:90%;} }
+  </style>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header>
+  <div class="logo" tabindex="0">Tribe</div>
+  <nav>
+    <a href="#" data-section="home" tabindex="0">Home</a>
+    <a href="#" data-section="shop" tabindex="0">Shop</a>
+    <a href="#" id="cartBtn" tabindex="0">Cart</a>
+    <a href="#" data-section="profile" tabindex="0">Profile</a>
+    <a href="#" data-section="contact" tabindex="0">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HOME (UNCHANGED) -->
+  <section id="home" class="active">
+    <div class="hero">
+      <h1>Welcome to Tribe</h1>
+      <p>JOIN THE TRIBE.WEAR THE VIBE</p>
+      <button class="btn" id="shopNowBtn">Start Shopping</button>
+    </div>
+  </section>
+
+  <!-- SHOP -->
+  <section id="shop">
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products"/>
+      <select id="categoryFilter" aria-label="Filter by category">
+        <option value="all">All Categories</option>
+        <option value="clothes">Clothes</option>
+        <option value="accessories">Accessories</option>
+      </select>
+      <select id="subCategoryFilter" aria-label="Filter by subcategory">
+        <option value="all">All Subcategories</option>
+      </select>
+      <select id="priceFilter" aria-label="Filter by price range">
+        <option value="all">All Prices</option>
+        <option value="under300">Under ₹300</option>
+        <option value="300to600">₹30 to ₹600</option>
+        <option value="above600">Above ₹600</option>
+      </select>
+    </div>
+    <div class="products" id="productList"></div>
+  </section>
+
+  <!-- CART SIDEBAR -->
+  <div id="cartSidebar" aria-label="Shopping cart">
+    <h2>Your Cart</h2>
+    <div id="cartItems"><p>Your cart is empty.</p></div>
+    <div id="bill"></div>
+    <button id="checkoutBtn">Checkout</button>
+  </div>
+
+  <!-- PROFILE & CONTACT (UNCHANGED) -->
+  <section id="profile">
+    <h2>Profile</h2>
+    <form id="profileForm">
+      <label for="nameInput">Name</label>
+      <input type="text" id="nameInput" placeholder="Your Name" required autocomplete="name" />
+      <label for="emailInput">Email</label>
+      <input type="email" id="emailInput" placeholder="Your Email" required autocomplete="email" />
+      <label for="messageInput">Message</label>
+      <textarea id="messageInput" rows="5" placeholder="Your Message"></textarea>
+      <button type="submit">Save Profile</button>
+    </form>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>Got questions? Reach out!</p>
+    <p>
+      Email: <a href="mailto:contact@tribeshop.com" tabindex="0">contact@tribeshop.com</a><br />
+      Instagram: <a href="https://instagram.com/tribeshop" target="_blank" rel="noopener" tabindex="0">@tribeshop</a><br />
+      Twitter: <a href="https://twitter.com/tribeshop" target="_blank" rel="noopener" tabindex="0">@tribeshop</a>
+    </p>
+  </section>
+</main>
+
+<script>
+const products = [
+  {id:1, name:"Dress", category:"clothes", sub:"Dresses", price:4500, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR61d7qKLp1P7hVX4Y0uPhd41oYJw8OzFboOQ&s"},
+  {id:2, name:"Sunglasses", category:"accessories", sub:"Sunglasses", price:300, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVmkg-0zC-T1d3YYpv6d4xFVwojm8Q-EuzNQ&s"},
+  {id:3, name:"Corset", category:"clothes", sub:"T-Shirts", price:2500, img:"https://lh3.googleusercontent.com/proxy/VPgJ7KnbB8VT_TVSS5D-CNiUe3gQmq47zY01UxNz5_Up4HUjqy6plpoTaP-pR_tXD2gewySi0rdHBSUdaEtkRu2Md99kaZN_ZKXXDZJGpLwfY4_eKn3nyaPeOyYoz0YKY_PdR98imVpupe3lZexuqGJAbhUpl_KDfw"},
+  {id:4, name:"Necklace", category:"accessories", sub:"Necklaces", price:500, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrVty11Q-fMPahMijwtoIDU_AJLV0ZlJv3h1-qlXxSfi_bh7VYQDFkkHn20B7B7cdkH54&usqp=CAU"},
+  {id:5, name:"Denim", category:"clothes", sub:"Pants", price:7000, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMFpjUK8R8AWcrSTXUQOzHZGYJx3XaL_z7bA&s"},
+  {id:6, name:"Hoodies", category:"accessories", sub:"Hoodies", price:5000, 
+  img:"https://blushade.in/cdn/shop/files/tshirt15761.jpg?v=1725453393&width=2000"},
+
+  // ✅ New clothes
+  {id:7, name:"Skirt", category:"clothes", sub:"Skirts", price:450, img:"https://us.princesspolly.com/cdn/shop/files/1-modelinfo-violetta-us4_dd68db3a-5101-4d27-b071-e5838f06adf4.jpg?v=1726710147&width=1800"},
+  {id:8, name:"Casual T-Shirt", category:"clothes", sub:"T-Shirts", price:250, img:"https://imagescdn.allensolly.com/img/app/product/3/39835695-16712304.jpg?auto=format&w=390"},
+  {id:9, name:"Summer Shorts", category:"clothes", sub:"Shorts", price:280, img:"https://images-cdn.ubuy.co.in/63a2662165f2b5104b3ccf43-womens-shorts-for-summer-dressy-comfy.jpg"},
+
+  // ✅ New accessories
+  {id:10, name:"Hand Ring", category:"accessories", sub:"Rings", price:150, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpoEBusqGGLWARzQRG-rsMoHqjrUPq3lBA6g&s"},
+  {id:11, name:"Gold Ring", category:"accessories", sub:"Rings", price:550, img:"https://m.media-amazon.com/images/I/511oRWY7vAL._UY1100_.jpg"},
+
+  // ✅ Perfumes
+  {id:12, name:"Floral Perfume", category:"accessories", sub:"Perfumes", price:1000, img:"https://myfrenchcountryhomemagazine.com/wp-content/uploads/2022/04/floral-perfumes-featured.jpg"},
+  {id:13, name:"Woody Perfume", category:"accessories", sub:"Perfumes", price:900, img:"https://hips.hearstapps.com/hmg-prod/images/autumn-perfumes-64ff2b51db944.jpg?crop=1.00xw:1.00xh;0,0&resize=1200:*"},
+  {id:14, name:"Luxury Perfume", category:"accessories", sub:"Perfumes", price:12000, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSJV9qyLkj_6vywGFqBcnDPUWWpurJght_hQ&s"},
+];
+ 
+  const productList = document.getElementById("productList");
+  const categoryFilter = document.getElementById("categoryFilter");
+  const subCategoryFilter = document.getElementById("subCategoryFilter");
+  const priceFilter = document.getElementById("priceFilter");
+  const searchInput = document.getElementById("searchInput");
+  const cartSidebar = document.getElementById("cartSidebar");
+  const cartBtn = document.getElementById("cartBtn");
+  const cartItemsDiv = document.getElementById("cartItems");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  const billDiv = document.getElementById("bill");
+  const sections = document.querySelectorAll("main > section");
+  const navLinks = document.querySelectorAll("header nav a");
+  const shopNowBtn = document.getElementById("shopNowBtn");
+  const profileForm = document.getElementById("profileForm");
+
+  let cart = [];
+
+  function renderSubcategories() {
+    const cat = categoryFilter.value;
+    const subs = [...new Set(products.filter(p=>cat==='all'?true:p.category===cat).map(p=>p.sub))];
+    subCategoryFilter.innerHTML = '<option value="all">All Subcategories</option>';
+    subs.forEach(s => { const opt=document.createElement('option'); opt.value=s; opt.textContent=s; subCategoryFilter.appendChild(opt); });
+  }
+
+  function renderProducts() {
+    let filtered = products;
+
+    // Filter by category & subcategory
+    const cat = categoryFilter.value;
+    if(cat!=='all') filtered = filtered.filter(p=>p.category===cat);
+    const sub = subCategoryFilter.value;
+    if(sub!=='all') filtered = filtered.filter(p=>p.sub===sub);
+
+    // Filter by price
+    const price = priceFilter.value;
+    if(price==='under300') filtered=filtered.filter(p=>p.price<300);
+    else if(price==='300to600') filtered=filtered.filter(p=>p.price>=300 && p.price<=600);
+    else if(price==='above600') filtered=filtered.filter(p=>p.price>600);
+
+    // Filter by search
+    const query = searchInput.value.toLowerCase();
+    if(query) filtered = filtered.filter(p=>p.name.toLowerCase().includes(query));
+
+    productList.innerHTML='';
+    if(filtered.length===0){ productList.innerHTML=`<p style="color:#2c3aab; text-align:center; font-weight:700;">No products found.</p>`; return; }
+    filtered.forEach(p=>{
+      const div=document.createElement("div");
+      div.className="product";
+      div.innerHTML=`
+        <img src="${p.img}" alt="${p.name}" loading="lazy" />
+        <h3>${p.name}</h3>
+        <p>₹${p.price.toFixed(2)}</p>
+        <button data-id="${p.id}">Add to Cart</button>
+      `;
+      productList.appendChild(div);
+    });
+  }
+
+  productList.addEventListener("click", e=>{
+    if(e.target.tagName==="BUTTON"){ addToCart(Number(e.target.dataset.id)); }
+  });
+
+  function addToCart(id){
+    const p=products.find(p=>p.id===id); if(!p) return;
+    const existing=cart.find(i=>i.id===id); if(existing){ existing.qty+=1; } else { cart.push({...p, qty:1}); }
+    renderCart(); alert(`${p.name} added to cart!`);
+  }
+
+  function renderCart(){
+    if(cart.length===0){ cartItemsDiv.innerHTML=`<p>Your cart is empty.</p>`; billDiv.textContent=''; return; }
+    cartItemsDiv.innerHTML=''; cart.forEach(item=>{
+      const p=document.createElement("p");
+      p.innerHTML=`${item.name} (${item.qty} × ₹${item.price.toFixed(2)}) <button data-id="${item.id}">&times;</button>`;
+      cartItemsDiv.appendChild(p);
+    });
+    billDiv.textContent=`Total: ₹${cart.reduce((sum,i)=>sum+i.price*i.qty,0).toFixed(2)}`;
+  }
+
+  cartItemsDiv.addEventListener("click", e=>{
+    if(e.target.tagName==="BUTTON"){
+      const id=Number(e.target.dataset.id);
+      const idx=cart.findIndex(i=>i.id===id);
+      if(idx>-1){ if(cart[idx].qty>1){cart[idx].qty-=1;} else{cart.splice(idx,1);} renderCart(); }
+    }
+  });
+
+  checkoutBtn.addEventListener("click", ()=>{ alert(`Total Bill: ₹${cart.reduce((sum,i)=>sum+i.price*i.qty,0).toFixed(2)}\nThank you for shopping!`); cart=[]; renderCart(); cartSidebar.classList.remove("open"); });
+
+  cartBtn.addEventListener("click", ()=>cartSidebar.classList.toggle("open"));
+
+  categoryFilter.addEventListener("change",()=>{ renderSubcategories(); renderProducts(); });
+  subCategoryFilter.addEventListener("change",renderProducts);
+  priceFilter.addEventListener("change",renderProducts);
+  searchInput.addEventListener("input",renderProducts);
+  shopNowBtn.addEventListener("click",()=>{ sections.forEach(s=>s.classList.remove("active")); document.getElementById("shop").classList.add("active"); renderProducts(); });
+
+  navLinks.forEach(a=>{
+    a.addEventListener("click", e=>{
+      e.preventDefault();
+      const sec=a.dataset.section; if(!sec) return;
+      sections.forEach(s=>s.classList.remove("active"));
+      document.getElementById(sec).classList.add("active");
+      if(sec==='shop') renderProducts();
+    });
+  });
+
+  profileForm.addEventListener("submit", e=>{
+    e.preventDefault(); alert(`Profile saved!\nName: ${profileForm.nameInput.value}\nEmail: ${profileForm.emailInput.value}`); profileForm.reset();
+  });
+
+  // Init
+  renderSubcategories();
+  renderProducts();
+</script>
+
+</body>
+</html>
